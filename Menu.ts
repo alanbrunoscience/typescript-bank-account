@@ -9,7 +9,15 @@ export function main() {
     const c1 = new Account(1, 123, 1, "Jonas", 100000);
     c1.display();
 
+    // Withdraw
+    console.log(c1.withdraw(200000));
+    c1.display();
+
     const c2 = new Account(2, 123, 2, "Aline", 200000);
+    c2.display();
+
+    // Deposit
+    c2.deposit(100);
     c2.display();
 
     do {

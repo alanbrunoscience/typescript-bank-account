@@ -7,12 +7,12 @@ export class Account {
     private _holder: string;
     private _balance: number;
 
-	constructor(_number: number, _agency: number, _type: number, _holder: string, _balance: number) {
-		this._number = _number;
-		this._agency = _agency;
-		this._type = _type;
-		this._holder = _holder;
-		this._balance = _balance;
+	constructor(bANumber: number, bBranch: number, bAType: number, bAHolder: string, balance: number) {
+		this._number = bANumber;
+		this._agency = bBranch;
+		this._type = bAType;
+		this._holder = bAHolder;
+		this._balance = balance;
 	}
 
 	public get_number(): number {
@@ -54,19 +54,49 @@ export class Account {
 	public set_balance(value: number) {
 		this._balance = value;
 	}
+
+    public withdraw(ammount: number): boolean {
+        if (this._balance < ammount) {
+            console.log("\n-> Insufficient balance! Impossible to withdraw.\n");
+            return false;
+        }
+
+        this._balance -= ammount;
+        return true;
+    }
+
+    public deposit(valor: number): void {
+        this._balance = this._balance + valor;
+    }
     
     public display(): void {
+
+        let bAType: string;
+
+        switch(this._type) {
+            case 1:
+                bAType = "Checking Account";
+                break;
+            case 2:
+                bAType = "Savings Account";
+                break;
+            default:
+                bAType = "Invalid Account Type";
+                
+        }
+
         console.log("\n******************************************");
         console.log("            Bank Account Data            ");
         console.log("******************************************");
         console.log(`\n1) Bank Account Number: ${this._number};`);
         console.log(`2) Bank Branch: ${this._agency};`);
-        console.log(`3) Bank Account Type: ${this._type};`);
+        console.log(`3) Bank Account Type: ${bAType};`);
         console.log(`4) Bank Account Holder: ${this._holder};`);
         console.log(`5) Bank Account Balance: ${new Intl.NumberFormat('pt-BR', {
             style: "currency",
             currency: "BRL",
         }).format(this._balance)}.\n`);
+
     }
 
 }
