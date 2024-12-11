@@ -15,46 +15,46 @@ export class Account {
 		this._balance = balance;
 	}
 
-	public get_number(): number {
+	public getNumber(): number {
 		return this._number;
 	}
 
-	public get_agency(): number {
+	public getAgency(): number {
 		return this._agency;
 	}
 
-	public get_type(): number {
+	public getType(): number {
 		return this._type;
 	}
 
-	public get_holder(): string {
+	public getHolder(): string {
 		return this._holder;
 	}
 
-	public get_balance(): number {
+	public getBalance(): number {
 		return this._balance;
 	}
 
-	public set_number(value: number) {
+	public setNumber(value: number) {
 		this._number = value;
 	}
 
-	public set_agency(value: number) {
+	public setAgency(value: number) {
 		this._agency = value;
 	}
 
-    public set_type(value: number) {
+	public setType(value: number) {
 		this._type = value;
 	}
 
-	public set_holder(value: string) {
+	public setHolder(value: string) {
 		this._holder = value;
 	}
 
-	public set_balance(value: number) {
+	public setBalance(value: number) {
 		this._balance = value;
 	}
-
+	
     public withdraw(ammount: number): boolean {
         if (this._balance < ammount) {
             console.log("\n-> Insufficient balance! Impossible to withdraw.\n");
