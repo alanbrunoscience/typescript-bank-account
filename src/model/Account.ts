@@ -50,7 +50,7 @@ export class Account {
         console.log(`5) Bank Account Balance: ${new Intl.NumberFormat('pt-BR', {
             style: "currency",
             currency: "BRL",
-        }).format(this.getBalance())}.\n`);
+        }).format(this.getBalance())};`);
 
     }
 

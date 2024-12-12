@@ -1,24 +1,54 @@
 import readlineSync = require("readline-sync");
 import { colors } from './src/util/Colors';
 import { Account } from './src/model/Account';
+import { CheckingAccount } from "./src/model/CheckingAccount";
 
 export function main() {
 
     let option: number;
 
+    // Create an Object Account
     const c1 = new Account(1, 123, 1, "Jonas", 100000);
     c1.display();
 
     // Withdraw
+    console.log("\n====== TRYING TO WITHDRAW R$ 200.000,00 ======");
     console.log(c1.withdraw(200000));
+
+    console.log("\n====== SHOW THAT THE BALANCE AMOUNT HAS NOT CHANGED ======");
     c1.display();
 
+    // Create a New Object Account
     const c2 = new Account(2, 123, 2, "Aline", 200000);
+    console.log("\n====== DISPLAY NEW OBJECT INFO ======");
     c2.display();
 
     // Deposit
+    console.log("\n====== DEPOSITING R$ 100,00 FOR THIS NEW OBJECT ======");
     c2.deposit(100);
+
+    console.log("\n====== SHOW THAT THE BALANCE AMOUNT INCREASED ======");
     c2.display();
+
+    // Create an Object Checking Account
+    const cc1 = new CheckingAccount(3, 789, 1, "Andressa", 100000, 1000); // Or const cc1: CheckingAccount = new CheckingAccount(...)
+
+    console.log("\n====== DISPLAY NEW OBJECT INFO ======");
+    cc1.display();
+
+    // Withdraw
+    console.log("\n====== TRYING TO WITHDRAW R$ 100.500,00 ======");
+    cc1.withdraw(100500);
+
+    console.log("\n====== SHOW THAT THE BALANCE VALUE HAS BECOME NEGATIVE (OVERDRAFT LIMIT) ======");
+    cc1.display();
+
+    // Deposit
+    console.log("\n====== DEPOSITING R$ 1000,00 FOR THIS OBJECT ======");
+    cc1.deposit(1000);
+
+    console.log("\n====== SHOW THAT THE OVERDRAFT LIMIT WAS OFFSET BY THE DEPOSIT MADE ======");
+    cc1.display();
 
     do {
         option = menu();
