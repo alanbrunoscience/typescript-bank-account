@@ -7,73 +7,28 @@ export class Account {
     private _holder: string;
     private _balance: number;
 
-	constructor(bANumber: number, bBranch: number, bAType: number, bAHolder: string, balance: number) {
-		this._number = bANumber;
-		this._agency = bBranch;
-		this._type = bAType;
-		this._holder = bAHolder;
-		this._balance = balance;
-	}
+    // Personalized Methods
+    public withdraw(amount: number): boolean {
 
-	public getNumber(): number {
-		return this._number;
-	}
-
-	public getAgency(): number {
-		return this._agency;
-	}
-
-	public getType(): number {
-		return this._type;
-	}
-
-	public getHolder(): string {
-		return this._holder;
-	}
-
-	public getBalance(): number {
-		return this._balance;
-	}
-
-	public setNumber(value: number) {
-		this._number = value;
-	}
-
-	public setAgency(value: number) {
-		this._agency = value;
-	}
-
-	public setType(value: number) {
-		this._type = value;
-	}
-
-	public setHolder(value: string) {
-		this._holder = value;
-	}
-
-	public setBalance(value: number) {
-		this._balance = value;
-	}
-	
-    public withdraw(ammount: number): boolean {
-        if (this._balance < ammount) {
+        if(this.getBalance() < amount) {
             console.log("\n-> Insufficient balance! Impossible to withdraw.\n");
             return false;
+        } else {
+            this.setBalance(this.getBalance() - amount);
+            return true;
         }
 
-        this._balance -= ammount;
-        return true;
     }
 
-    public deposit(valor: number): void {
-        this._balance = this._balance + valor;
+    public deposit(amount: number) {
+        this.setBalance(this.getBalance() + amount);
     }
-    
+
     public display(): void {
 
         let bAType: string;
 
-        switch(this._type) {
+        switch(this.getType()) {
             case 1:
                 bAType = "Checking Account";
                 break;
@@ -88,15 +43,64 @@ export class Account {
         console.log("\n******************************************");
         console.log("            Bank Account Data            ");
         console.log("******************************************");
-        console.log(`\n1) Bank Account Number: ${this._number};`);
-        console.log(`2) Bank Branch: ${this._agency};`);
+        console.log(`\n1) Bank Account Number: ${this.getNumber()};`);
+        console.log(`2) Bank Branch: ${this.getAgency()};`);
         console.log(`3) Bank Account Type: ${bAType};`);
-        console.log(`4) Bank Account Holder: ${this._holder};`);
+        console.log(`4) Bank Account Holder: ${this.getHolder()};`);
         console.log(`5) Bank Account Balance: ${new Intl.NumberFormat('pt-BR', {
             style: "currency",
             currency: "BRL",
-        }).format(this._balance)}.\n`);
+        }).format(this.getBalance())}.\n`);
 
+    }
+
+    // Special Methods
+    constructor(bANumber: number, bABranch: number, bAType: number, bAHolder: string, balance: number) {
+        this._number = bANumber;
+        this._agency = bABranch;
+        this._type = bAType;
+        this._holder = bAHolder;
+        this._balance = balance;
+    }
+
+    public getNumber(): number {
+        return this._number;
+    }
+
+    public setNumber(bANumber: number) {
+        this._number = bANumber;
+    }
+
+    public getAgency(): number {
+        return this._agency;
+    }
+
+    public setAgency(bABranch: number) {
+        this._agency = bABranch;
+    }
+
+    public getType(): number {
+        return this._type;
+    }
+
+    public setType(bAType: number) {
+        this._type = bAType;
+    }
+
+    public getHolder(): string {
+        return this._holder;
+    }
+
+    public setHolder(bAHolder: string) {
+        this._holder = bAHolder;
+    }
+
+    public getBalance(): number {
+        return this._balance;
+    }
+
+    public setBalance(balance: number) {
+        this._balance = balance;
     }
 
 }
