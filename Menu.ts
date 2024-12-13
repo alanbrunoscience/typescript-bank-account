@@ -2,42 +2,25 @@ import readlineSync = require("readline-sync");
 import { colors } from './src/util/Colors';
 import { CheckingAccount } from "./src/model/CheckingAccount";
 import { SavingsAccount } from "./src/model/SavingsAccount";
+import { ControllerAccount } from "./src/controller/ControllerAccount";
 
 export function main() {
 
-    let option: number;
+    let option, bANumber, bABranch, bAType, balance, overdraftLimit, anniversaryDate: number;
+    let bAHolder: string;
+    const accountTypes = ["Checking Account", "Savings Account"];
 
-    // Create Objects Checking Account
-    console.log("\n============ CHECKING ACCOUNT ============\n");
-    const cc1 = new CheckingAccount(1, 123, 1, "Alan", 100000, 1000);
-    const cc2 = new CheckingAccount(2, 456, 1, "Bruno", 200000, 1000);
+    // Controller class instance
+    let accounts: ControllerAccount = new ControllerAccount();
 
-    // Display Checking Account Information for both Objects
-    cc1.display();
-    console.log("\n====== WITHDRAW R$ 500,00 ======\n");
-    cc1.withdraw(500);
-    cc1.display();
+    // New Instances of the Checking Account Class (Objects)
+    accounts.registerAccount(new CheckingAccount(accounts.generateBANumber(), 1234, 1, 'Amanda Magro', 1000000.00, 100000.00));
+    accounts.registerAccount(new CheckingAccount(accounts.generateBANumber(), 4578, 1, 'João da Silva', 1000.00, 100.00));
 
-    cc2.display();
-    console.log("\n====== DEPOSIT R$ 1000.00 ======\n");
-    cc2.deposit(1000);
-    cc2.display();
 
-    // Create Objects Savings Account
-    console.log("\n============ SAVINGS ACCOUNT ============\n");
-    const sa1 = new SavingsAccount(1, 123, 2, "Alan", 100000, 10);
-    const sa2 = new SavingsAccount(2, 456, 2, "Bruno", 200000, 12);
-
-    // Display Savings Account Information for both Objects
-    sa1.display();
-    console.log("\n====== WITHDRAW R$ 500,00 ======\n");
-    sa1.withdraw(500);
-    sa1.display();
-
-    sa2.display();
-    console.log("\n====== DEPOSIT R$ 1000.00 ======\n");
-    sa2.deposit(1000);
-    sa2.display();
+    // New Instances of the Savings Account Class (Objects)
+    accounts.registerAccount(new SavingsAccount(accounts.generateBANumber(), 5789, 2, "Geana Almeida", 10000, 10));
+    accounts.registerAccount(new SavingsAccount(accounts.generateBANumber(), 5698, 2, "Jean Lima", 15000, 15));
 
     do {
         option = menu();
@@ -45,36 +28,79 @@ export function main() {
         switch(option) {
             case 1:
                 console.log(colors.fg.whitestrong, "\nCreate a bank account:\n", colors.reset);
+
+                console.log("Enter the bank branch number: ");
+                bABranch = readlineSync.questionInt('');
+
+                console.log("\nEnter the account holder name: ");
+                bAHolder = readlineSync.question('');
+
+                console.log("\nEnter the account type: ");
+                bAType = readlineSync.keyInSelect(accountTypes, "", {cancel: false}) + 1;
+
+                console.log("\nEnter the account balance: ");
+                balance = readlineSync.questionFloat('');
+
+                switch(bAType) {
+                    case 1:
+                        console.log("\nEnter the overdraft limit: ");
+                        overdraftLimit = readlineSync.questionFloat('');
+                        accounts.registerAccount(new CheckingAccount(accounts.generateBANumber(), bABranch, bAType, bAHolder, balance, overdraftLimit));
+                        break;
+                    case 2:
+                        console.log("\nEnter the savings account anniversary: ");
+                        anniversaryDate = readlineSync.questionInt('');
+                        accounts.registerAccount(new SavingsAccount(accounts.generateBANumber(), bABranch, bAType, bAHolder, balance, anniversaryDate));
+                        break;
+                }
+
+                keyPress();
                 break;
             case 2:
                 console.log(colors.fg.whitestrong, "\nList all bank accounts:\n", colors.reset);
+                accounts.listAllAccounts();
+                keyPress();
                 break;
             case 3:
                 console.log(colors.fg.whitestrong, "\nSearch bank account by number:\n", colors.reset);
+
+                console.log("\nEnter the account number:");
+                bANumber = readlineSync.questionInt('');
+
+                accounts.searchByNumber(bANumber);
+
+                keyPress();
                 break;
             case 4:
                 console.log(colors.fg.whitestrong, "\nUpdate bank account details:\n", colors.reset);
+                keyPress();
                 break;
             case 5:
                 console.log(colors.fg.whitestrong, "\nDelete bank account:\n", colors.reset);
+                keyPress();
                 break;
             case 6:
                 console.log(colors.fg.whitestrong, "\nWithdraw:\n", colors.reset);
+                keyPress();
                 break;
             case 7:
                 console.log(colors.fg.whitestrong, "\nDeposit:\n", colors.reset);
+                keyPress();
                 break;
             case 8:
                 console.log(colors.fg.whitestrong, "\nTransfer amounts:\n", colors.reset);
+                keyPress();
                 break;
             case 9:
                 console.log(colors.fg.greenstrong);
                 console.log("\nBrazilian Bank - Your Future Starts Here!");
                 about();
                 console.log(colors.reset, "");
+                keyPress();
                 break;
             default:
                 console.log(colors.fg.whitestrong, "\n-> Invalid option! Choose an option between 1 and 9.", colors.reset);
+                keyPress();
         }
     } while(option !== 9);
 }
