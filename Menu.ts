@@ -1,6 +1,5 @@
 import readlineSync = require("readline-sync");
 import { colors } from './src/util/Colors';
-import { Account } from './src/model/Account';
 import { CheckingAccount } from "./src/model/CheckingAccount";
 import { SavingsAccount } from "./src/model/SavingsAccount";
 

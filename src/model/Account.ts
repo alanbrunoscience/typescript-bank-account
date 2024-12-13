@@ -1,4 +1,4 @@
-export class Account {
+export abstract class Account {
 
     // Data model
     private _number: number;
