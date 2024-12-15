@@ -2,12 +2,12 @@ import readlineSync = require("readline-sync");
 import { colors } from './src/util/Colors';
 import { CheckingAccount } from "./src/model/CheckingAccount";
 import { SavingsAccount } from "./src/model/SavingsAccount";
-import { AccountController } from "./src/controller/AccountController";
+import { ControllerAccount } from "./src/controller/ControllerAccount";
 
 export function main() {
 
-    // Instance of the Account Controller class
-    let account: AccountController = new AccountController();
+    // Instance of the Controller Account class
+    let account: ControllerAccount = new ControllerAccount();
 
     // Auxiliary variables
     let option, bANumber, bABranch, bAType, balance, overdraftLimit, anniversaryDate: number;
@@ -101,11 +101,9 @@ export function main() {
                 console.log("\nBrazilian Bank - Your Future Starts Here!");
                 about();
                 console.log(colors.reset, "");
-                keyPress();
                 break;
             default:
                 console.log(colors.fg.whitestrong, "\n-> Invalid option! Choose an option between 1 and 9.", colors.reset);
-                keyPress();
         }
     } while(option !== 9);
 }
