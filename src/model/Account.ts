@@ -20,13 +20,13 @@ export abstract class Account {
 
     }
 
-    public deposit(amount: number) {
+    public deposit(amount: number): void {
         this.setBalance(this.getBalance() + amount);
     }
 
     public display(): void {
 
-        let bAType: string;
+        let bAType: string = "";
 
         switch(this.getType()) {
             case 1:
