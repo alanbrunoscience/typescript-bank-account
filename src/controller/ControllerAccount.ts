@@ -3,7 +3,7 @@ import { RepositoryAccount } from '../repository/RepositoryAccount';
 
 export class ControllerAccount implements RepositoryAccount {
 
-    /// Array collection to store Account objects
+    // Array collection to store Account objects
     private listAccounts = new Array<Account>();
 
     // Control account numbers
