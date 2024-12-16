@@ -35,6 +35,7 @@ export function main() {
                 }
 
                 bAHolder = readlineSync.question("\n2) Enter the account holder's name: ");
+                account.toTitleCase(bAHolder);
 
                 console.log("\n3) Select the account type:");
                 bAType = readlineSync.keyInSelect(accountTypes, "> ", {cancel: false}) + 1;
@@ -117,6 +118,7 @@ export function main() {
                         }
 
                         bAHolder = readlineSync.question("\n3) Enter the new account holder's name: ");
+                        account.toTitleCase(bAHolder);
                         
                         balance = readlineSync.questionFloat("\n4) Enter the new balance: R$ ");
                         while(balance < 0.00) {

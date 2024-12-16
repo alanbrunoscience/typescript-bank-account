@@ -70,6 +70,14 @@ export class ControllerAccount implements RepositoryAccount {
     transfer(numberOrigin: number, numberDest: number, amount: number): void {
         
     }
+    
+    public toTitleCase(holderName: string) {
+        return holderName
+            .toLowerCase()
+            .split(" ")
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
+    }
 
     // Generate Account Number Automatically
     public generateAccNumber(): number {
