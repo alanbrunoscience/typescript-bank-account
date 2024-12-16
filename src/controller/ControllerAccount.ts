@@ -7,7 +7,7 @@ export class ControllerAccount implements RepositoryAccount {
     // Array collection to store Account objects
     private accounts: Array<Account> = new Array<Account>();
     
-    // Account ID - Autoincremental account primary key
+    // Account ID - Auto Incremental primary key
     accountId: number = 0;
 
     searchByNumber(bANumber: number): void {
