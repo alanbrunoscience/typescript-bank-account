@@ -12,6 +12,14 @@ export class ControllerAccount implements RepositoryAccount {
 
     searchByNumber(bANumber: number): void {
         
+        let searchedAccount = this.searchInArray(bANumber);
+
+        if (searchedAccount != null) {
+            searchedAccount.display();
+        } else {
+            console.log(colors.fg.green, `\n-> Bank account number ${bANumber} was not found!\n`, colors.reset);
+        }
+
     }
 
     listAllAccounts(): void {
@@ -22,7 +30,7 @@ export class ControllerAccount implements RepositoryAccount {
 
     registerAccount(account: Account): void {
         this.accounts.push(account);
-        console.log(colors.fg.green, `\n-> The Bank Account number ${account.getNumber()} was registered successfully!`, colors.reset);
+        console.log(colors.fg.green, `\n-> The Bank Account number ${account.getNumber()} was registered successfully!\n`, colors.reset);
     }
 
     updateAccount(account: Account): void {
@@ -31,9 +39,9 @@ export class ControllerAccount implements RepositoryAccount {
 
         if (searchedAccount != null) {
             this.accounts[this.accounts.indexOf(searchedAccount)] = account;
-            console.log(colors.fg.green, `\n-> Bank account number ${account.getNumber()} has been updated successfully!`, colors.reset);
+            console.log(colors.fg.green, `\n-> Bank account number ${account.getNumber()} has been updated successfully!\n`, colors.reset);
         } else {
-            console.log(colors.fg.green, `\n-> Bank account number ${account.getNumber()} was not found!`, colors.reset);
+            console.log(colors.fg.green, `\n-> Bank account number ${account.getNumber()} was not found!\n`, colors.reset);
         }
         
     }
@@ -44,9 +52,9 @@ export class ControllerAccount implements RepositoryAccount {
 
         if (searchedAccount != null) {
             this.accounts.splice(this.accounts.indexOf(searchedAccount), 1);
-            console.log(colors.fg.green, `\n-> Bank account number ${bANumber} has been deleted successfully!`, colors.reset);
+            console.log(colors.fg.green, `\n\n-> Bank account number ${bANumber} has been deleted successfully!\n`, colors.reset);
         } else {
-            console.log(colors.fg.green, `\n-> Bank account number ${bANumber} was not found!`, colors.reset);
+            console.log(colors.fg.green, `\n\n-> Bank account number ${bANumber} was not found!\n`, colors.reset);
         }
 
     }
@@ -77,6 +85,11 @@ export class ControllerAccount implements RepositoryAccount {
 
         return null;
         
+    }
+
+    isEmpty(): boolean {
+        let result = this.accounts.length <= 0;
+        return result;
     }
 
 }
