@@ -53,10 +53,6 @@ export function main() {
                         break;
                     case 2:
                         anniversaryDate = readlineSync.questionFloat("\n5) Enter the anniversary day of the Savings Account: ");
-                        while(anniversaryDate < 1 || anniversaryDate > 28) {
-                            anniversaryDate = readlineSync.questionFloat("\n-> Invalid data! Enter a value between 1 and 28: ");
-                        }
-
                         account.registerAccount(new SavingsAccount(account.generateAccNumber(), bABranch, bAType, bAHolder, balance, anniversaryDate));
                         break;
                 }
