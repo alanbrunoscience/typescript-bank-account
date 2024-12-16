@@ -7,7 +7,7 @@ export class SavingsAccount extends Account {
     // Personalized Methods
     public display(): void {
         super.display();
-        console.log(`6) Account Anniversary Date: ${this.getAnniversaryDate()}.\n`);
+        console.log(`6) Bank Account Anniversary Date (day): ${this.getAnniversaryDate()}.\n`);
     }
 
     // Special Methods
