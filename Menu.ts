@@ -30,6 +30,9 @@ export function main() {
                 console.log(colors.fg.whitestrong, "\nCreate a bank account:\n", colors.reset);
 
                 bABranch = readlineSync.questionInt("\n1) Enter the account branch number: ", {limitMessage: "\n-> Invalid data type entered!"});
+                while(bABranch < 0) {
+                    bABranch = readlineSync.questionInt("\n-> Invalid value! Enter an account branch number greater than or equal to 0: ");
+                }
 
                 bAHolder = readlineSync.question("\n2) Enter the account holder's name: ");
 
@@ -37,7 +40,6 @@ export function main() {
                 bAType = readlineSync.keyInSelect(accountTypes, "> ", {cancel: false}) + 1;
 
                 balance = readlineSync.questionFloat("\n4) Enter the initial balance: R$ ");
-                
                 while(balance < 0.00) {
                     balance = readlineSync.questionFloat("\n-> Invalid data! Enter a balance greater than or equal to 0: R$ ");
                 }
@@ -76,12 +78,79 @@ export function main() {
                 keyPress();
                 break;
             case 4:
-                console.log(colors.fg.whitestrong, "\nUpdate bank account details:\n\n", colors.reset);
+                console.log(colors.fg.whitestrong, "\nUpdate bank account data:\n", colors.reset);
+
+                bANumber = readlineSync.questionInt("\n1) Enter the bank account number: ", {limitMessage: "\n-> Invalid data type entered!"});
+                while(bANumber < 1) {
+                    bANumber = readlineSync.questionInt("\n-> Invalid number! Enter a value greater than 0: ");
+                }
+
+                let searchedAccount = account.searchInArray(bANumber);
+
+                if(searchedAccount != null) {
+
+                    bABranch = readlineSync.questionInt("\n2) Enter the new account branch number: ", {limitMessage: "\n-> Invalid data type entered!"});
+                    while(bABranch < 0) {
+                        bABranch = readlineSync.questionInt("\n-> Invalid value! Enter an account branch number greater than or equal to 0: ");
+                    }
+
+                    bAHolder = readlineSync.question("\n3) Enter the new account holder's name: ");
+                    
+                    balance = readlineSync.questionFloat("\n4) Enter the new balance: R$ ");
+                    while(balance < 0.00) {
+                        balance = readlineSync.questionFloat("\n-> Invalid data! Enter a balance greater than or equal to 0: R$ ");
+                    }
+
+                    bAType = searchedAccount.getType();
+
+                    switch(bAType) {
+                        case 1:
+                            overdraftLimit = readlineSync.questionFloat("\n5) Enter the new account overdraft limit: R$ ");
+                            while(overdraftLimit < 0.00) {
+                                overdraftLimit = readlineSync.questionFloat("\n-> Invalid data! Enter an overdraft limit greater than or equal to 0: R$ ");
+                            }
+
+                            account.updateAccount(new CheckingAccount(bANumber, bABranch, bAType, bAHolder, balance, overdraftLimit));
+                            break;
+                        case 2:
+                            anniversaryDate = readlineSync.questionInt("\n5) Enter the new anniversary day of the Savings Account: ");
+                            while(anniversaryDate < 1 || anniversaryDate > 28) {
+                                anniversaryDate = readlineSync.questionInt("\n-> Invalid data! Enter a value between 1 and 28, please: ");
+                            }
+
+                            account.updateAccount(new SavingsAccount(bANumber, bABranch, bAType, bAHolder, balance, anniversaryDate));
+                            break;
+                    }
+                } else {
+                    console.log(colors.fg.green, `\n-> Bank account number ${bANumber} was not found!`, colors.reset);
+                }
 
                 keyPress();
                 break;
             case 5:
-                console.log(colors.fg.whitestrong, "\nDelete bank account:\n\n", colors.reset);
+                console.log(colors.fg.whitestrong, "\nDelete bank account:\n", colors.reset);
+
+                bANumber = readlineSync.questionInt("\nEnter the bank account number: ", {limitMessage: "\n-> Invalid data type entered!"});
+                while(bANumber < 1) {
+                    bANumber = readlineSync.questionInt("\n-> Invalid number! Enter a value greater than 0: ");
+                }
+
+                let checkAccount = account.searchInArray(bANumber);
+
+                if(checkAccount != null) {
+                    let confirmation: boolean;
+
+                    confirmation = readlineSync.keyInYNStrict("\n-> Are you sure you want to cancel?");
+
+                    if(confirmation) {
+                        account.deleteAccount(bANumber);
+                    } else {
+                        console.log(colors.fg.green, "\n-> Operation canceled!", colors.reset);
+                    }               
+                
+                } else {
+                    console.log(colors.fg.green, `\n-> Bank account number ${bANumber} was not found!`, colors.reset);
+                }
 
                 keyPress();
                 break;

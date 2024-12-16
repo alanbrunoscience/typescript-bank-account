@@ -26,11 +26,29 @@ export class ControllerAccount implements RepositoryAccount {
     }
 
     updateAccount(account: Account): void {
+
+        let searchedAccount = this.searchInArray(account.getNumber());
+
+        if (searchedAccount != null) {
+            this.accounts[this.accounts.indexOf(searchedAccount)] = account;
+            console.log(colors.fg.green, `\n-> Bank account number ${account.getNumber()} has been updated successfully!`, colors.reset);
+        } else {
+            console.log(colors.fg.green, `\n-> Bank account number ${account.getNumber()} was not found!`, colors.reset);
+        }
         
     }
 
     deleteAccount(bANumber: number): void {
-        
+
+        let searchedAccount = this.searchInArray(bANumber);
+
+        if (searchedAccount != null) {
+            this.accounts.splice(this.accounts.indexOf(searchedAccount), 1);
+            console.log(colors.fg.green, `\n-> Bank account number ${bANumber} has been deleted successfully!`, colors.reset);
+        } else {
+            console.log(colors.fg.green, `\n-> Bank account number ${bANumber} was not found!`, colors.reset);
+        }
+
     }
 
     withdraw(bANumber: number, amount: number): void {
