@@ -1,4 +1,5 @@
 import { Account } from "./Account";
+import { colors } from "../util/Colors";
 
 export class CheckingAccount extends Account {
 
@@ -9,7 +10,7 @@ export class CheckingAccount extends Account {
 
         // if(amount > (this.getBalance() + this.getOverdraftLimit())) {
         if((amount - this.getBalance()) > Math.abs(this.getOverdraftLimit())) {
-            console.log("\n-> Insufficient balance! Impossible to withdraw.\n");
+            console.log(colors.fg.red, "\n\n-> Insufficient balance! Impossible to withdraw.\n", colors.reset);
             return false;
         } else {
             this.setBalance(this.getBalance() - amount);

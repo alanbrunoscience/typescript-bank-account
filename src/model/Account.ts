@@ -1,3 +1,5 @@
+import { colors } from "../util/Colors";
+
 export abstract class Account {
 
     // Data model
@@ -11,7 +13,7 @@ export abstract class Account {
     public withdraw(amount: number): boolean {
 
         if(this.getBalance() < amount) {
-            console.log("\n-> Insufficient balance! Impossible to withdraw.\n");
+            console.log(colors.fg.red, "\n\n-> Insufficient balance! Impossible to withdraw.\n", colors.reset);
             return false;
         } else {
             this.setBalance(this.getBalance() - amount);
