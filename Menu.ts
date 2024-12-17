@@ -10,7 +10,7 @@ export function main() {
     let account: ControllerAccount = new ControllerAccount();
 
     // Auxiliary variables
-    let option, bANumber, bABranch, bAType, balance, overdraftLimit, anniversaryDate, amount, destAccNumber: number;
+    let option, bANumber, bABranch, bAType, balance, overdraftLimit, anniversaryDate, amount, srcAccNum, destAccNum: number;
     let bAHolder: string;
     const accountTypes = ['Checking Account', 'Savings Account'];
 
@@ -26,7 +26,9 @@ export function main() {
         option = menu();
     
         switch(option) {
+
             case 1:
+
                 console.log(colors.fg.whitestrong, "\nCreate a bank account:\n", colors.reset);
 
                 bABranch = readlineSync.questionInt("\n1) Enter the account branch number: ", {limitMessage: "\n-> Invalid data type entered!"});
@@ -66,6 +68,7 @@ export function main() {
 
                 keyPress();
                 break;
+
             case 2:
 
                 if(!account.isEmpty()) {
@@ -79,7 +82,9 @@ export function main() {
 
                 keyPress();
                 break;
+
             case 3:
+
                 if(!account.isEmpty()) {
 
                     console.log(colors.fg.whitestrong, "\nSearch bank account by number:\n", colors.reset);
@@ -98,7 +103,9 @@ export function main() {
 
                 keyPress();
                 break;
+
             case 4:
+
                 if(!account.isEmpty()) {
 
                     console.log(colors.fg.whitestrong, "\nUpdate bank account data:\n", colors.reset);
@@ -148,7 +155,7 @@ export function main() {
                                 break;
                         }
                     } else {
-                        console.log(colors.fg.red, `\n\n-> Bank account number ${bANumber} was not found!\n`, colors.reset);
+                        console.log(colors.fg.red, `\n\n-> Bank account number '${bANumber}' was not found!\n`, colors.reset);
                     }
 
                 } else {
@@ -157,7 +164,9 @@ export function main() {
 
                 keyPress();
                 break;
+
             case 5:
+
                 if(!account.isEmpty()) {
 
                     console.log(colors.fg.whitestrong, "\nDelete bank account:\n", colors.reset);
@@ -182,7 +191,7 @@ export function main() {
                         }               
                     
                     } else {
-                        console.log(colors.fg.red, `\n\n-> Bank account number ${bANumber} was not found!\n`, colors.reset);
+                        console.log(colors.fg.red, `\n\n-> Bank account number '${bANumber}' was not found!\n`, colors.reset);
                     }
 
                 } else {
@@ -191,7 +200,9 @@ export function main() {
                 
                 keyPress();
                 break;
+
             case 6:
+
                 if(!account.isEmpty()) {
                     console.log(colors.fg.whitestrong, "\nWithdraw:\n", colors.reset);
 
@@ -204,7 +215,19 @@ export function main() {
 
                     if(searchedAccount != null) {
 
-                        amount = readlineSync.questionFloat(`\n2) The current balance is R$ ${account.getCurrentBalance(bANumber)?.toFixed(2)}. Enter the withdrawal amount: R$ `, {limitMessage: "\n-> Invalid data type entered!"});
+                        const currentBalance =  account.getCurrentBalance(bANumber);
+
+                        if (currentBalance === null) {
+                            console.log(colors.fg.red, "\n\n-> Error: Unable to retrieve the account balance.\n", colors.reset);
+                            return;
+                        }
+
+                        const formattedBalance = new Intl.NumberFormat('pt-BR', {
+                            style: "currency",
+                            currency: "BRL"
+                        }).format(currentBalance);
+
+                        amount = readlineSync.questionFloat(`\n2) The current balance is R$ ${formattedBalance}. Enter the withdrawal amount: R$ `, {limitMessage: "\n-> Invalid data type entered!"});
                         while(amount < 1.00) {
                             amount = readlineSync.questionFloat("\n-> Invalid amount! Enter an amount greater than 0: ");
                         }
@@ -212,7 +235,7 @@ export function main() {
                         account.withdraw(bANumber, amount);
 
                     } else {
-                        console.log(colors.fg.red, `\n\n-> Bank account number ${bANumber} was not found!\n`, colors.reset);
+                        console.log(colors.fg.red, `\n\n-> Bank account number '${bANumber}' was not found!\n`, colors.reset);
                     }
                     
                 } else {
@@ -221,7 +244,9 @@ export function main() {
 
                 keyPress();
                 break;
+
             case 7:
+
                 if(!account.isEmpty()) {
                     console.log(colors.fg.whitestrong, "\nDeposit:\n", colors.reset);
 
@@ -234,7 +259,19 @@ export function main() {
 
                     if(searchedAccount != null) {
 
-                        amount = readlineSync.questionFloat(`\n2) The current balance is R$ ${account.getCurrentBalance(bANumber)?.toFixed(2)}. Enter the deposit amount: R$ `, {limitMessage: "\n-> Invalid data type entered!"});
+                        const currentBalance =  account.getCurrentBalance(bANumber);
+
+                        if (currentBalance === null) {
+                            console.log(colors.fg.red, "\n\n-> Error: Unable to retrieve the account balance.\n", colors.reset);
+                            return;
+                        }
+
+                        const formattedBalance = new Intl.NumberFormat('pt-BR', {
+                            style: "currency",
+                            currency: "BRL"
+                        }).format(currentBalance);
+
+                        amount = readlineSync.questionFloat(`\n2) The current balance is R$ ${formattedBalance}. Enter the deposit amount: R$ `, {limitMessage: "\n-> Invalid data type entered!"});
                         while(amount < 1.00) {
                             amount = readlineSync.questionFloat("\n-> Invalid amount! Enter an amount greater than 0: ");
                         }
@@ -242,7 +279,7 @@ export function main() {
                         account.deposit(bANumber, amount);
 
                     } else {
-                        console.log(colors.fg.red, `\n\n-> Bank account number ${bANumber} was not found!\n`, colors.reset);
+                        console.log(colors.fg.red, `\n\n-> Bank account number '${bANumber}' was not found!\n`, colors.reset);
                     }
                     
                 } else {
@@ -251,23 +288,60 @@ export function main() {
 
                 keyPress();
                 break;
+
             case 8:
+
                 if(!account.isEmpty()) {
-                    console.log(colors.fg.whitestrong, "\nTransfer amounts:\n", colors.reset);
+                    console.log(colors.fg.whitestrong, "\nTransfer Between Accounts:\n", colors.reset);
+
+                    srcAccNum = readlineSync.questionInt("\n1) Enter the source bank account number: ", {limitMessage: "\n-> Invalid data type entered!"});
+                    while(srcAccNum < 1) {
+                        srcAccNum = readlineSync.questionInt("\n-> Invalid number! Enter a value greater than 0: ");
+                    }
+
+                    let sourceAccount = account.searchInArray(srcAccNum);
+
+                    if(sourceAccount != null) {
+                        destAccNum = readlineSync.questionInt("\n2) Enter the destination bank account number: ", {limitMessage: "\n-> Invalid data type entered!"});
+                        while(destAccNum < 1) {
+                            destAccNum = readlineSync.questionInt("\n-> Invalid number! Enter a value greater than 0: ");
+                        }
+
+                        let destinationAccount = account.searchInArray(destAccNum);
+
+                        if(destinationAccount != null) {
+                            amount = readlineSync.questionFloat(`\n3) Enter the amount to be transferred: R$ `, {limitMessage: "\n-> Invalid data type entered!"});
+                            while(amount < 1.00) {
+                                amount = readlineSync.questionFloat("\n-> Invalid amount! Enter an amount greater than 0: ");
+                            }
+
+                            account.transfer(srcAccNum, destAccNum, amount);
+                        } else {
+                            console.log(colors.fg.red, `\n\n-> Bank account number '${destAccNum}' was not found!\n`, colors.reset);
+                        }
+                    } else {
+                        console.log(colors.fg.red, `\n\n-> Bank account number '${srcAccNum}' was not found!\n`, colors.reset);
+                    }
+                    
                 } else {
                     console.log(colors.fg.red, "\nThere is no data registered yet! \n", colors.reset);
                 }
 
                 keyPress();
                 break;
+
             case 9:
+
                 console.log(colors.fg.greenstrong);
                 console.log("\nBrazilian Bank - Your Future Starts Here!");
                 about();
                 console.log(colors.reset, "");
                 break;
+
             default:
+
                 console.log(colors.fg.whitestrong, "\n-> Invalid option! Choose an option between 1 and 9.", colors.reset);
+
         }
     } while(option !== 9);
 }
