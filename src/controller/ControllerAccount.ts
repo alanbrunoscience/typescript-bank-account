@@ -10,6 +10,17 @@ export class ControllerAccount implements RepositoryAccount {
     // Account ID - Auto Incremental primary key
     accountId: number = 0;
 
+    registerAccount(account: Account): void {
+        this.accounts.push(account);
+        console.log(colors.fg.green, `\n-> The Bank Account number '${account.getNumber()}' was registered successfully!\n`, colors.reset);
+    }
+
+    listAllAccounts(): void {
+        for(let account of this.accounts) {
+            account.display();
+        }
+    }
+
     searchByNumber(bANumber: number): void {
         
         let searchedAccount = this.searchInArray(bANumber);
@@ -20,17 +31,6 @@ export class ControllerAccount implements RepositoryAccount {
             console.log(colors.fg.red, `\n-> Bank account number '${bANumber}' was not found!\n`, colors.reset);
         }
 
-    }
-
-    listAllAccounts(): void {
-        for(let account of this.accounts) {
-            account.display();
-        }
-    }
-
-    registerAccount(account: Account): void {
-        this.accounts.push(account);
-        console.log(colors.fg.green, `\n-> The Bank Account number '${account.getNumber()}' was registered successfully!\n`, colors.reset);
     }
 
     updateAccount(account: Account): void {
@@ -58,6 +58,22 @@ export class ControllerAccount implements RepositoryAccount {
         }
 
     }
+
+    searchByHolder(bAHolder: string): boolean {
+
+        // Data filtering
+        let searchByAccHolder = this.accounts.filter(account => account.getHolder().toUpperCase().includes(bAHolder.toUpperCase()));
+    
+        if (searchByAccHolder.length > 0) {
+            // Data Listing
+            console.log("");
+            searchByAccHolder.forEach(account => account.display());
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
 
     withdraw(bANumber: number, amount: number): void {
         
@@ -131,6 +147,7 @@ export class ControllerAccount implements RepositoryAccount {
         
     }
     
+    // Complementary Methods
     public toTitleCase(holderName: string) {
         return holderName
             .toLowerCase()

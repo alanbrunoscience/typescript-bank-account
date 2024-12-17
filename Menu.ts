@@ -37,7 +37,7 @@ export function main() {
                 }
 
                 bAHolder = readlineSync.question("\n2) Enter the account holder's name: ");
-                account.toTitleCase(bAHolder);
+                let formattedHolderName = account.toTitleCase(bAHolder);
 
                 console.log("\n3) Select the account type:");
                 bAType = readlineSync.keyInSelect(accountTypes, "> ", {cancel: false}) + 1;
@@ -54,15 +54,15 @@ export function main() {
                             overdraftLimit = readlineSync.questionFloat("\n-> Invalid data! Enter an overdraft limit greater than or equal to 0: R$ ");
                         }
                         console.log("");
-                        account.registerAccount(new CheckingAccount(account.generateAccNumber(), bABranch, bAType, bAHolder, balance, overdraftLimit));
+                        account.registerAccount(new CheckingAccount(account.generateAccNumber(), bABranch, bAType, formattedHolderName, balance, overdraftLimit));
                         break;
                     case 2:
                         anniversaryDate = readlineSync.questionInt("\n5) Enter the anniversary day of the Savings Account: ");
                         while(anniversaryDate < 1 || anniversaryDate > 28) {
                             anniversaryDate = readlineSync.questionInt("\n-> Invalid data! Enter a value between 1 and 28, please: ");
                         }
-                        console.log("\n");
-                        account.registerAccount(new SavingsAccount(account.generateAccNumber(), bABranch, bAType, bAHolder, balance, anniversaryDate));
+                        console.log("");
+                        account.registerAccount(new SavingsAccount(account.generateAccNumber(), bABranch, bAType, formattedHolderName, balance, anniversaryDate));
                         break;
                 }
 
@@ -125,7 +125,7 @@ export function main() {
                         }
 
                         bAHolder = readlineSync.question("\n3) Enter the new account holder's name: ");
-                        account.toTitleCase(bAHolder);
+                        let formattedHolderName = account.toTitleCase(bAHolder);
                         
                         balance = readlineSync.questionFloat("\n4) Enter the new balance: R$ ");
                         while(balance < 0.00) {
@@ -142,7 +142,7 @@ export function main() {
                                 }
 
                                 console.log("");
-                                account.updateAccount(new CheckingAccount(bANumber, bABranch, bAType, bAHolder, balance, overdraftLimit));
+                                account.updateAccount(new CheckingAccount(bANumber, bABranch, bAType, formattedHolderName, balance, overdraftLimit));
                                 break;
                             case 2:
                                 anniversaryDate = readlineSync.questionInt("\n5) Enter the new anniversary day of the Savings Account: ");
@@ -151,7 +151,7 @@ export function main() {
                                 }
 
                                 console.log("");
-                                account.updateAccount(new SavingsAccount(bANumber, bABranch, bAType, bAHolder, balance, anniversaryDate));
+                                account.updateAccount(new SavingsAccount(bANumber, bABranch, bAType, formattedHolderName, balance, anniversaryDate));
                                 break;
                         }
                     } else {
@@ -204,6 +204,26 @@ export function main() {
             case 6:
 
                 if(!account.isEmpty()) {
+
+                    console.log(colors.fg.whitestrong, "\nSearch bank account by holder:\n", colors.reset);
+
+                    bAHolder = readlineSync.question("\nEnter the bank account holder's name: ");
+                    let formattedHolderName = account.toTitleCase(bAHolder);
+
+                    if(!account.searchByHolder(bAHolder)) {
+                        console.log(colors.fg.red, `\n\n-> There is no bank account which the holder's name is '${formattedHolderName}'.\n`, colors.reset);
+                    }
+
+                } else {
+                    console.log(colors.fg.red, "\nThere is no data registered yet! \n", colors.reset);
+                }
+                
+                keyPress();
+                break;
+
+            case 7:
+
+                if(!account.isEmpty()) {
                     console.log(colors.fg.whitestrong, "\nWithdraw:\n", colors.reset);
 
                     bANumber = readlineSync.questionInt("\n1) Enter the bank account number: ", {limitMessage: "\n-> Invalid data type entered!"});
@@ -233,7 +253,7 @@ export function main() {
                 keyPress();
                 break;
 
-            case 7:
+            case 8:
 
                 if(!account.isEmpty()) {
                     console.log(colors.fg.whitestrong, "\nDeposit:\n", colors.reset);
@@ -265,7 +285,7 @@ export function main() {
                 keyPress();
                 break;
 
-            case 8:
+            case 9:
 
                 if(!account.isEmpty()) {
                     console.log(colors.fg.whitestrong, "\nTransfer Between Accounts:\n", colors.reset);
@@ -306,7 +326,7 @@ export function main() {
                 keyPress();
                 break;
 
-            case 9:
+            case 0:
 
                 console.log(colors.fg.greenstrong);
                 console.log("\nBrazilian Bank - Your Future Starts Here!");
@@ -316,10 +336,10 @@ export function main() {
 
             default:
 
-                console.log(colors.fg.whitestrong, "\n-> Invalid option! Choose an option between 1 and 9.", colors.reset);
+                console.log(colors.fg.whitestrong, "\n-> Invalid option! Choose an option between 0 and 9.", colors.reset);
 
         }
-    } while(option !== 9);
+    } while(option !== 0);
 }
 
 export function menu(): number {
@@ -331,12 +351,13 @@ export function menu(): number {
     console.log("\n 1 - Create bank account;" +
         "\n 2 - List all bank accounts;" +
         "\n 3 - Search bank account by number;" +
-        "\n 4 - Update bank account details;" +
+        "\n 4 - Update bank account data;" +
         "\n 5 - Delete bank account;" +
-        "\n 6 - Withdraw;" +
-        "\n 7 - Deposit;" +
-        "\n 8 - Transfer amounts between bank accounts;" +
-        "\n 9 - Exit."
+        "\n 6 - Search bank account by holder;" +
+        "\n 7 - Withdraw;" +
+        "\n 8 - Deposit;" +
+        "\n 9 - Transfer amounts between bank accounts;" +
+        "\n 0 - Exit."
     );
     let option: number = readlineSync.questionInt("\n-> Choose an option above: ", {limitMessage: "\n-> Invalid data type entered!"});
     console.log("\n********************************************************");

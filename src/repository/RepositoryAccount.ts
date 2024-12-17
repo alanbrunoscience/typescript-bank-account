@@ -3,11 +3,12 @@ import { Account } from "../model/Account";
 export interface RepositoryAccount {
 
     // CRUD Methods (Create, Read, Update, and Delete)
-    searchByNumber(bANumber: number): void;
-    listAllAccounts(): void;
     registerAccount(account: Account): void;
+    listAllAccounts(): void;
+    searchByNumber(bANumber: number): void;    
     updateAccount(account: Account): void;
     deleteAccount(bANumber: number): void;
+    searchByHolder(bAHolder: string): void;
 
     // Banking Methods
     withdraw(bANumber: number, amount: number): void;
