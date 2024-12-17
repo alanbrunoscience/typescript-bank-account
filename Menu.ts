@@ -215,19 +215,7 @@ export function main() {
 
                     if(searchedAccount != null) {
 
-                        const currentBalance =  account.getCurrentBalance(bANumber);
-
-                        if (currentBalance === null) {
-                            console.log(colors.fg.red, "\n\n-> Error: Unable to retrieve the account balance.\n", colors.reset);
-                            return;
-                        }
-
-                        const formattedBalance = new Intl.NumberFormat('pt-BR', {
-                            style: "currency",
-                            currency: "BRL"
-                        }).format(currentBalance);
-
-                        amount = readlineSync.questionFloat(`\n2) The current balance is R$ ${formattedBalance}. Enter the withdrawal amount: R$ `, {limitMessage: "\n-> Invalid data type entered!"});
+                        amount = readlineSync.questionFloat(`\n2) The current balance is R$ ${account.getCurrentBalance(bANumber)?.toFixed(2)}. Enter the withdrawal amount: R$ `, {limitMessage: "\n-> Invalid data type entered!"});
                         while(amount < 1.00) {
                             amount = readlineSync.questionFloat("\n-> Invalid amount! Enter an amount greater than 0: ");
                         }
@@ -259,19 +247,7 @@ export function main() {
 
                     if(searchedAccount != null) {
 
-                        const currentBalance =  account.getCurrentBalance(bANumber);
-
-                        if (currentBalance === null) {
-                            console.log(colors.fg.red, "\n\n-> Error: Unable to retrieve the account balance.\n", colors.reset);
-                            return;
-                        }
-
-                        const formattedBalance = new Intl.NumberFormat('pt-BR', {
-                            style: "currency",
-                            currency: "BRL"
-                        }).format(currentBalance);
-
-                        amount = readlineSync.questionFloat(`\n2) The current balance is R$ ${formattedBalance}. Enter the deposit amount: R$ `, {limitMessage: "\n-> Invalid data type entered!"});
+                        amount = readlineSync.questionFloat(`\n2) The current balance is R$ ${account.getCurrentBalance(bANumber)?.toFixed(2)}. Enter the deposit amount: R$ `, {limitMessage: "\n-> Invalid data type entered!"});
                         while(amount < 1.00) {
                             amount = readlineSync.questionFloat("\n-> Invalid amount! Enter an amount greater than 0: ");
                         }

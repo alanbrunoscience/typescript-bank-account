@@ -97,12 +97,34 @@ export class ControllerAccount implements RepositoryAccount {
         
         let sourceAccount = this.searchInArray(sourceNumber);
         let destAccount = this.searchInArray(destNumber);
+        let previousBalanceSrc = this.getCurrentBalance(sourceNumber);
+
+        if (previousBalanceSrc === null) {
+            console.log(colors.fg.red, "\n\n-> Error: Unable to retrieve the account balance.\n", colors.reset);
+            return;
+        }     
+
+        let previousBalanceDest = this.getCurrentBalance(destNumber);
+        
+        if (previousBalanceDest === null) {
+            console.log(colors.fg.red, "\n\n-> Error: Unable to retrieve the account balance.\n", colors.reset);
+            return;
+        }  
 
         if (sourceAccount != null && destAccount != null) {
             if(sourceAccount.withdraw(amount) === true) {
                 destAccount.deposit(amount);
-                console.log(colors.fg.green, `\n\n-> Transfer from account number '${sourceNumber}' to account number '${destNumber}' was successful!!\n`, colors.reset);
-            } 
+                console.log(colors.fg.green, `\n\n-> The transfer of ${Intl.NumberFormat('pt-BR', {
+                    style: "currency",
+                    currency: "BRL",
+                }).format(amount)} from account number '${sourceNumber}' (previous balance: ${Intl.NumberFormat('pt-BR', {
+                    style: "currency",
+                    currency: "BRL",
+                }).format(previousBalanceSrc)}) to account number '${destNumber}' (previous balance: ${Intl.NumberFormat('pt-BR', {
+                    style: "currency",
+                    currency: "BRL",
+                }).format(previousBalanceDest)}) was successful!\n`, colors.reset);
+            }
         } else {
             console.log(colors.fg.red, `\n\n-> Bank account number '${sourceNumber}' and/or bank account number '${destNumber}' not found!\n`, colors.reset);
         }
