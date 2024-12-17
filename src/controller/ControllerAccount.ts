@@ -74,6 +74,15 @@ export class ControllerAccount implements RepositoryAccount {
     }
 
     deposit(bANumber: number, amount: number): void {
+
+        let searchedAccount = this.searchInArray(bANumber);
+
+        if (searchedAccount != null) {
+            searchedAccount.deposit(amount);
+            console.log(colors.fg.green, `\n\n-> The deposit into account number ${bANumber} was successful! Now, the current balance is R$ ${searchedAccount.getBalance().toFixed(2)}.\n`, colors.reset);
+        } else {
+            console.log(colors.fg.red, `\n\n-> Bank account number ${bANumber} was not found!\n`, colors.reset);
+        }
         
     }
 

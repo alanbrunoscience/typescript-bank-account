@@ -219,12 +219,32 @@ export function main() {
                     console.log(colors.fg.red, "\nThere is no data registered yet! \n", colors.reset);
                 }
 
-
                 keyPress();
                 break;
             case 7:
                 if(!account.isEmpty()) {
                     console.log(colors.fg.whitestrong, "\nDeposit:\n", colors.reset);
+
+                    bANumber = readlineSync.questionInt("\n1) Enter the bank account number: ", {limitMessage: "\n-> Invalid data type entered!"});
+                    while(bANumber < 1) {
+                        bANumber = readlineSync.questionInt("\n-> Invalid number! Enter a value greater than 0: ");
+                    }
+
+                    let searchedAccount = account.searchInArray(bANumber);
+
+                    if(searchedAccount != null) {
+
+                        amount = readlineSync.questionFloat(`\n2) The current balance is R$ ${account.getCurrentBalance(bANumber)?.toFixed(2)}. Enter the deposit amount: R$ `, {limitMessage: "\n-> Invalid data type entered!"});
+                        while(amount < 1.00) {
+                            amount = readlineSync.questionFloat("\n-> Invalid amount! Enter an amount greater than 0: ");
+                        }
+
+                        account.deposit(bANumber, amount);
+
+                    } else {
+                        console.log(colors.fg.red, `\n\n-> Bank account number ${bANumber} was not found!\n`, colors.reset);
+                    }
+                    
                 } else {
                     console.log(colors.fg.red, "\nThere is no data registered yet! \n", colors.reset);
                 }
