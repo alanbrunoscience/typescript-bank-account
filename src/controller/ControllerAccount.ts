@@ -17,7 +17,7 @@ export class ControllerAccount implements RepositoryAccount {
         if (searchedAccount != null) {
             searchedAccount.display();
         } else {
-            console.log(colors.fg.green, `\n-> Bank account number ${bANumber} was not found!\n`, colors.reset);
+            console.log(colors.fg.red, `\n-> Bank account number ${bANumber} was not found!\n`, colors.reset);
         }
 
     }
@@ -41,7 +41,7 @@ export class ControllerAccount implements RepositoryAccount {
             this.accounts[this.accounts.indexOf(searchedAccount)] = account;
             console.log(colors.fg.green, `\n-> Bank account number ${account.getNumber()} has been updated successfully!\n`, colors.reset);
         } else {
-            console.log(colors.fg.green, `\n-> Bank account number ${account.getNumber()} was not found!\n`, colors.reset);
+            console.log(colors.fg.red, `\n-> Bank account number ${account.getNumber()} was not found!\n`, colors.reset);
         }
         
     }
@@ -54,13 +54,23 @@ export class ControllerAccount implements RepositoryAccount {
             this.accounts.splice(this.accounts.indexOf(searchedAccount), 1);
             console.log(colors.fg.green, `\n\n-> Bank account number ${bANumber} has been deleted successfully!\n`, colors.reset);
         } else {
-            console.log(colors.fg.green, `\n\n-> Bank account number ${bANumber} was not found!\n`, colors.reset);
+            console.log(colors.fg.red, `\n\n-> Bank account number ${bANumber} was not found!\n`, colors.reset);
         }
 
     }
 
     withdraw(bANumber: number, amount: number): void {
         
+        let searchedAccount = this.searchInArray(bANumber);
+
+        if (searchedAccount != null) {
+            if(searchedAccount.withdraw(amount) == true) {
+                console.log(colors.fg.green, `\n\n-> The withdrawal from account number ${bANumber} was successful! Now, the current balance is R$ ${searchedAccount.getBalance().toFixed(2)}.\n`, colors.reset);
+            }
+        } else {
+            console.log(colors.fg.red, `\n\n-> Bank account number ${bANumber} was not found!\n`, colors.reset);
+        }
+
     }
 
     deposit(bANumber: number, amount: number): void {
@@ -99,5 +109,18 @@ export class ControllerAccount implements RepositoryAccount {
         let result = this.accounts.length <= 0;
         return result;
     }
+
+    getCurrentBalance(bANumber: number): number | null {
+
+        let searchedAccount = this.searchInArray(bANumber);
+        
+        if (searchedAccount) {
+            return searchedAccount.getBalance();
+        } else {
+            console.log(colors.fg.red, `\n\n-> Bank account number ${bANumber} was not found!\n`, colors.reset);
+            return null;
+        }
+    }
+    
 
 }

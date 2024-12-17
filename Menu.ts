@@ -10,7 +10,7 @@ export function main() {
     let account: ControllerAccount = new ControllerAccount();
 
     // Auxiliary variables
-    let option, bANumber, bABranch, bAType, balance, overdraftLimit, anniversaryDate: number;
+    let option, bANumber, bABranch, bAType, balance, overdraftLimit, anniversaryDate, amount, destAccNumber: number;
     let bAHolder: string;
     const accountTypes = ['Checking Account', 'Savings Account'];
 
@@ -74,7 +74,7 @@ export function main() {
                     account.listAllAccounts();
 
                 } else {
-                    console.log(colors.fg.green, "\nThere is no data registered yet! \n", colors.reset);
+                    console.log(colors.fg.red, "\nThere is no data registered yet! \n", colors.reset);
                 }
 
                 keyPress();
@@ -84,7 +84,7 @@ export function main() {
 
                     console.log(colors.fg.whitestrong, "\nSearch bank account by number:\n", colors.reset);
 
-                    bANumber = readlineSync.questionInt("\n1) Enter the bank account number: ", {limitMessage: "\n-> Invalid data type entered!"});
+                    bANumber = readlineSync.questionInt("\nEnter the bank account number: ", {limitMessage: "\n-> Invalid data type entered!"});
                     while(bANumber < 1) {
                         bANumber = readlineSync.questionInt("\n-> Invalid number! Enter a value greater than 0: ");
                     }
@@ -93,7 +93,7 @@ export function main() {
                     account.searchByNumber(bANumber);
 
                 } else {
-                    console.log(colors.fg.green, "\nThere is no data registered yet! \n", colors.reset);
+                    console.log(colors.fg.red, "\nThere is no data registered yet! \n", colors.reset);
                 }
 
                 keyPress();
@@ -148,11 +148,11 @@ export function main() {
                                 break;
                         }
                     } else {
-                        console.log(colors.fg.green, `\n\n-> Bank account number ${bANumber} was not found!\n`, colors.reset);
+                        console.log(colors.fg.red, `\n\n-> Bank account number ${bANumber} was not found!\n`, colors.reset);
                     }
 
                 } else {
-                    console.log(colors.fg.green, "\nThere is no data registered yet! \n", colors.reset);
+                    console.log(colors.fg.red, "\nThere is no data registered yet! \n", colors.reset);
                 }
 
                 keyPress();
@@ -178,32 +178,65 @@ export function main() {
                         if(confirmation) {
                             account.deleteAccount(bANumber);
                         } else {
-                            console.log(colors.fg.green, "\n\n-> Operation canceled!\n", colors.reset);
+                            console.log(colors.fg.red, "\n\n-> Operation canceled!\n", colors.reset);
                         }               
                     
                     } else {
-                        console.log(colors.fg.green, `\n\n-> Bank account number ${bANumber} was not found!\n`, colors.reset);
+                        console.log(colors.fg.red, `\n\n-> Bank account number ${bANumber} was not found!\n`, colors.reset);
                     }
 
                 } else {
-                    console.log(colors.fg.green, "\nThere is no data registered yet! \n", colors.reset);
+                    console.log(colors.fg.red, "\nThere is no data registered yet! \n", colors.reset);
                 }
                 
-
                 keyPress();
                 break;
             case 6:
-                console.log(colors.fg.whitestrong, "\nWithdraw:\n\n", colors.reset);
+                if(!account.isEmpty()) {
+                    console.log(colors.fg.whitestrong, "\nWithdraw:\n", colors.reset);
+
+                    bANumber = readlineSync.questionInt("\n1) Enter the bank account number: ", {limitMessage: "\n-> Invalid data type entered!"});
+                    while(bANumber < 1) {
+                        bANumber = readlineSync.questionInt("\n-> Invalid number! Enter a value greater than 0: ");
+                    }
+
+                    let searchedAccount = account.searchInArray(bANumber);
+
+                    if(searchedAccount != null) {
+
+                        amount = readlineSync.questionFloat(`\n2) The current balance is R$ ${account.getCurrentBalance(bANumber)?.toFixed(2)}. Enter the withdrawal amount: R$ `, {limitMessage: "\n-> Invalid data type entered!"});
+                        while(amount < 1.00) {
+                            amount = readlineSync.questionFloat("\n-> Invalid amount! Enter an amount greater than 0: ");
+                        }
+
+                        account.withdraw(bANumber, amount);
+
+                    } else {
+                        console.log(colors.fg.red, `\n\n-> Bank account number ${bANumber} was not found!\n`, colors.reset);
+                    }
+                    
+                } else {
+                    console.log(colors.fg.red, "\nThere is no data registered yet! \n", colors.reset);
+                }
+
 
                 keyPress();
                 break;
             case 7:
-                console.log(colors.fg.whitestrong, "\nDeposit:\n\n", colors.reset);
+                if(!account.isEmpty()) {
+                    console.log(colors.fg.whitestrong, "\nDeposit:\n", colors.reset);
+                } else {
+                    console.log(colors.fg.red, "\nThere is no data registered yet! \n", colors.reset);
+                }
 
                 keyPress();
                 break;
             case 8:
-                console.log(colors.fg.whitestrong, "\nTransfer amounts:\n\n", colors.reset);
+                if(!account.isEmpty()) {
+                    console.log(colors.fg.whitestrong, "\nTransfer amounts:\n", colors.reset);
+                } else {
+                    console.log(colors.fg.red, "\nThere is no data registered yet! \n", colors.reset);
+                }
 
                 keyPress();
                 break;
