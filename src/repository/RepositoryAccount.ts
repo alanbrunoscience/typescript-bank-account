@@ -8,7 +8,7 @@ export interface RepositoryAccount {
     searchByNumber(bANumber: number): void;    
     updateAccount(account: Account): void;
     deleteAccount(bANumber: number): void;
-    searchByHolder(bAHolder: string): void;
+    searchByHolder(bAHolder: string): boolean;
 
     // Banking Methods
     withdraw(bANumber: number, amount: number): void;
